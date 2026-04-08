@@ -1,5 +1,5 @@
 import streamlit as st
-from generator import gerar_movimentacoes
+from generator_h import gerar_movimentacoes
 from datetime import date
 
 # Configuração da página
