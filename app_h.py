@@ -57,7 +57,7 @@ data_inicio, data_fim = st.date_input(
     value=(date.today().replace(day=1), date.today())
 )
 
-st.info("Este intervalo afeta apenas o campo data_liquidacao. As demais datas não são impactadas.")
+st.info("Este intervalo afeta apenas de data de liquidação. As demais datas não são impactadas.")
 
 # Validação
 if data_inicio > data_fim:
