@@ -76,7 +76,7 @@ with st.expander("Cadastros (Arquivos Base)", expanded=True):
         params["classificacoes"] = r["classificacoes"]
         st.dataframe(r["preview"])
 
-
+st.divider()
 # =========================
 # PARÂMETROS
 # =========================
@@ -124,6 +124,7 @@ with st.expander("Parâmetros de Geração", expanded=True):
                 key=f"saldo_{conta}"
             )
 
+st.divider()
 
 # =========================
 # RESULTADOS - MOVIMENTAÇÕES
