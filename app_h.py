@@ -180,7 +180,6 @@ if st.button("Gerar CSV"):
 
         df_saldos = gerar_saldos(df, saldos_iniciais)
         st.session_state["df_saldos"] = df_saldos
-    st.rerun()
 
     # PREVIEW CORRETO
     df_preview = df.copy()
@@ -200,3 +199,4 @@ if st.button("Gerar CSV"):
         df.to_csv(index=False, sep=";", decimal=",").encode(),
         "movimentacoes.csv"
     )
+    st.rerun()
