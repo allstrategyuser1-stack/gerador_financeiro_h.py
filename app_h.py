@@ -162,14 +162,13 @@ if st.button("Gerar CSV"):
     # SALDOS (SÓ SE FLAG ATIVO)
     # -------------------------
     if gerar_saldos_flag:
-        df_saldos = gerar_saldos(df, saldos_iniciais)
-        st.session_state["df_saldos"] = df_saldos
 
         if not saldos_iniciais:
-            st.error("Preencha os saldos iniciais.")
-            st.stop()
+        st.error("Preencha os saldos iniciais.")
+        st.stop()
 
         df_saldos = gerar_saldos(df, saldos_iniciais)
+        st.session_state["df_saldos"] = df_saldos
 
         st.subheader("Prévia Saldos")
     df_saldos_preview = df_saldos.copy()
