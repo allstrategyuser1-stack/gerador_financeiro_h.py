@@ -11,6 +11,11 @@ from datetime import date
 
 st.sidebar.title("Informações importantes")
 
+st.sidebar.warning("""
+- Para centro de custo e tesouraria, deve ser importado o template de externos do Fluxo
+- Para classificação financeira, devem ser importados os dois templates do Fluxo
+""")
+
 st.sidebar.info("Os templates que devem ser utilizados para importação dos dados base são os do Software Fluxo, basta exportar do Fluxo e importar aqui ;)")
 st.sidebar.markdown("### ⚙️ Regras")
 st.sidebar.markdown("""
