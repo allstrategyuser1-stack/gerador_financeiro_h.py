@@ -92,6 +92,8 @@ if gerar_saldos_flag and "cod_tesouraria" in params:
 # GERAR
 # =========================
 if st.button("Gerar CSV"):
+
+    # GERA MOVIMENTAÇÕES
     df = gerar_movimentacoes(qtd, dec, data_ini, data_fim, params)
 
     st.dataframe(df.head())
@@ -102,17 +104,22 @@ if st.button("Gerar CSV"):
         "movimentacoes.csv"
     )
 
-# -------------------------
-# SALDOS
-# -------------------------
-if gerar_saldos_flag:
-    df_saldos = gerar_saldos(df, saldos_iniciais)
+    # -------------------------
+    # SALDOS (SÓ SE FLAG ATIVO)
+    # -------------------------
+    if gerar_saldos_flag:
 
-    st.subheader("Prévia Saldos")
-    st.dataframe(df_saldos.head())
+        if not saldos_iniciais:
+            st.error("Preencha os saldos iniciais.")
+            st.stop()
 
-    st.download_button(
-        "Baixar CSV Saldos",
-        df_saldos.to_csv(index=False).encode(),
-        "saldos.csv"
-    )
+        df_saldos = gerar_saldos(df, saldos_iniciais)
+
+        st.subheader("Prévia Saldos")
+        st.dataframe(df_saldos.head())
+
+        st.download_button(
+            "Baixar CSV Saldos",
+            df_saldos.to_csv(index=False).encode(),
+            "saldos.csv"
+        )
