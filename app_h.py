@@ -140,8 +140,21 @@ if gerar_saldos_flag and "df_saldos" in st.session_state:
 # =========================
 if st.button("Gerar CSV"):
 
+    # LIMPA ESTADO ANTIGO
+    st.session_state.pop("df", None)
+    st.session_state.pop("df_saldos", None)
+
     df = gerar_movimentacoes(qtd, dec, data_ini, data_fim, params)
     st.session_state["df"] = df
+
+    if gerar_saldos_flag:
+
+        if not saldos_iniciais:
+            st.error("Preencha os saldos iniciais.")
+            st.stop()
+
+        df_saldos = gerar_saldos(df, saldos_iniciais)
+        st.session_state["df_saldos"] = df_saldos
 
     df_preview = df.copy()
 
@@ -156,34 +169,4 @@ if st.button("Gerar CSV"):
         "Baixar CSV Movimentações",
         df.to_csv(index=False, sep=";", decimal=",").encode(),
         "movimentacoes.csv"
-    )
-
-# -------------------------
-# SALDOS (SÓ SE FLAG ATIVO)
-# -------------------------
-if gerar_saldos_flag:
-
-    if not saldos_iniciais:
-        st.error("Preencha os saldos iniciais.")
-        st.stop()
-
-    df_saldos = gerar_saldos(df, saldos_iniciais)
-    st.session_state["df_saldos"] = df_saldos
-
-    st.subheader("Prévia Saldos")
-
-    df_saldos_preview = df_saldos.copy()
-
-    for col in ["SALDO_FINAL", "TOTAL_ENTRADA", "TOTAL_SAIDA"]:
-        if col in df_saldos_preview.columns:
-            df_saldos_preview[col] = df_saldos_preview[col].map(
-                lambda x: f"{x:.2f}".replace(".", ",")
-            )
-
-    st.dataframe(df_saldos_preview.head())
-
-    st.download_button(
-        "Baixar CSV Saldos",
-        df_saldos.to_csv(index=False, sep=";", decimal=",").encode(),
-        "saldos.csv"
     )
