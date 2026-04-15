@@ -344,6 +344,7 @@ def gerar_saldos(df_mov, saldos_iniciais):
     # -------------------------
     df = normalizar_colunas(df)
 
+    # Apenas registros com liquidação
     df = df[df["data_liquidacao"].notnull() & (df["data_liquidacao"] != "")]
 
     # -------------------------
@@ -353,15 +354,8 @@ def gerar_saldos(df_mov, saldos_iniciais):
     df = df[df["data_liquidacao"].notnull()]
 
     # -------------------------
-    # Conversão segura de valor
+    # Valor (AGORA É FLOAT)
     # -------------------------
-    df["valor"] = (
-        df["valor"]
-        .astype(str)
-        .str.replace(r"\.(?=\d{3})", "", regex=True)
-        .str.replace(",", ".", regex=False)
-    )
-
     df["valor"] = pd.to_numeric(df["valor"], errors="coerce")
     df = df[df["valor"].notnull()]
 
@@ -378,7 +372,6 @@ def gerar_saldos(df_mov, saldos_iniciais):
         ["cod_tesouraria", "data_liquidacao", "natureza"]
     )["valor"].sum().reset_index()
 
-    # Pivot (E / S)
     pivot = agrupado.pivot_table(
         index=["cod_tesouraria", "data_liquidacao"],
         columns="natureza",
@@ -401,7 +394,7 @@ def gerar_saldos(df_mov, saldos_iniciais):
     pivot = pivot.sort_values(["cod_tesouraria", "data_liquidacao"])
 
     # -------------------------
-    # Cálculo de saldo acumulado
+    # Saldo acumulado
     # -------------------------
     resultado = []
 
@@ -410,8 +403,8 @@ def gerar_saldos(df_mov, saldos_iniciais):
         saldo = float(saldos_iniciais.get(conta, 0) or 0)
 
         for row in grupo.itertuples(index=False):
-            entrada = row.total_entrada
-            saida = row.total_saida
+            entrada = float(row.total_entrada)
+            saida = float(row.total_saida)
 
             saldo = saldo + entrada - saida
 
@@ -419,7 +412,7 @@ def gerar_saldos(df_mov, saldos_iniciais):
                 "saldo_final": round(saldo, 2),
                 "total_entrada": round(entrada, 2),
                 "total_saida": round(saida, 2),
-                "data": row.data_liquidacao,
+                "data": row.data_liquidacao.strftime("%Y-%m-%d"),
                 "cod_tesouraria": conta
             })
 
