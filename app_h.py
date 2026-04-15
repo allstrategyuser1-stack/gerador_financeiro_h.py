@@ -60,7 +60,7 @@ if file_tes:
 st.header("Classificação Financeira")
 
 file_est = st.file_uploader("Estrutura", key="estrutura_cf")
-file_est = st.file_uploader("Externo", key="externo_cf")
+file_ext = st.file_uploader("Externo", key="externo_cf")
 
 if file_est and file_ext:
     r = carregar_classificacao(file_est, file_ext)
