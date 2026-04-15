@@ -1,6 +1,7 @@
 import streamlit as st
 from generator_h import (
     gerar_movimentacoes,
+    gerar_saldos,
     carregar_unidades,
     carregar_centro_custo,
     carregar_classificacao,
