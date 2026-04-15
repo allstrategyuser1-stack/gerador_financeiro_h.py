@@ -25,8 +25,8 @@ def formatar_valor(x):
 # =========================
 # CONFIG INICIAL
 # =========================
-st.set_page_config(page_title="Gerador Financeiro", layout="wide")
-st.title("Gerador de Movimentações Financeiras")
+st.set_page_config(page_title="Gerador de base - Fluxo", layout="wide")
+st.title("Gerador de documentos e saldos - Fluxo")
 
 params = {}
 saldos_iniciais = {}
@@ -52,14 +52,14 @@ def upload_bloco(titulo, key, loader_fn, param_key, sucesso_msg=None):
 # =========================
 # UPLOADS
 # =========================
-with st.expander("Cadastros (Arquivos Base)", expanded=True):
+with st.expander("Estruturas para base", expanded=True):
 
     upload_bloco("Unidades", "upload_un", carregar_unidades, "cod_unidade")
 
     upload_bloco("Centro de Custo", "upload_cc", carregar_centro_custo, "cod_centro_custo")
 
     upload_bloco(
-        "Tesouraria (Contas Bancárias)",
+        "Tesouraria",
         "upload_tesouraria",
         carregar_tesouraria,
         "cod_tesouraria",
@@ -80,13 +80,13 @@ st.divider()
 # =========================
 # PARÂMETROS
 # =========================
-with st.expander("Parâmetros de Geração", expanded=True):
+with st.expander("Parâmetros gerais", expanded=True):
 
     col1, col2, col3 = st.columns(3)
 
     with col1:
         qtd_docs = st.number_input(
-            "Qtd. documentos",
+            "Quantidade de documentos",
             min_value=1,
             max_value=10000,
             value=20
@@ -94,7 +94,7 @@ with st.expander("Parâmetros de Geração", expanded=True):
 
     with col2:
         cs_decimais = st.number_input(
-            "Casas decimais",
+            "Quantidade de casas decimais no valor",
             min_value=2,
             max_value=6,
             value=2
@@ -102,7 +102,7 @@ with st.expander("Parâmetros de Geração", expanded=True):
 
     with col3:
         datas = st.date_input(
-            "Período liquidação",
+            "Período de títulos liquidados",
             value=(date.today().replace(day=1), date.today())
         )
 
@@ -111,10 +111,10 @@ with st.expander("Parâmetros de Geração", expanded=True):
         else:
             data_ini = data_fim = datas
 
-    gerar_saldos_flag = st.checkbox("Gerar CSV de Saldos")
+    gerar_saldos_flag = st.checkbox("Gerar arquivo com saldos")
 
     if gerar_saldos_flag and "cod_tesouraria" in params:
-        st.subheader("Saldos iniciais por conta")
+        st.subheader("Saldos iniciais por conta bancária")
 
         for conta in params["cod_tesouraria"]:
             saldos_iniciais[conta] = st.number_input(
@@ -130,7 +130,7 @@ st.divider()
 # RESULTADOS - MOVIMENTAÇÕES
 # =========================
 def exibir_movimentacoes(df):
-    st.subheader("Movimentações")
+    st.subheader("Documentos")
 
     df_preview = df.copy()
 
@@ -140,7 +140,7 @@ def exibir_movimentacoes(df):
     st.dataframe(df_preview.head())
 
     st.download_button(
-        "Baixar Movimentações",
+        "Baixar arquivo de Documentos",
         df.to_csv(index=False, sep=";", decimal=",").encode(),
         "movimentacoes.csv"
     )
@@ -161,7 +161,7 @@ def exibir_saldos(df_saldos):
     st.dataframe(df_preview.head())
 
     st.download_button(
-        "Baixar Saldos",
+        "Baixar arquivo de Saldos",
         df_saldos.to_csv(index=False, sep=";", decimal=",").encode(),
         "saldos.csv"
     )
