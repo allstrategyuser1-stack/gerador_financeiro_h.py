@@ -10,7 +10,7 @@ from generator_h import (
 from datetime import date
 
 def formatar_valor(x):
-    if pd.isna(x) or x == "":
+    if x is None or x == "":
         return ""
     try:
         return f"{float(x):.2f}".replace(".", ",")
