@@ -11,7 +11,7 @@ from datetime import date
 
 st.sidebar.title("Informações importantes")
 
-st.sidebar.info("Os templates que devem ser utilizados para importação dos dados base são os do Software Fluxo, basta exportar do Fluxo e importar aqui")
+st.sidebar.info("Os templates que devem ser utilizados para importação dos dados base são os do "### Software Fluxo", basta exportar do Fluxo e importar aqui")
 
 st.sidebar.markdown("### ⚙️ Regras")
 st.sidebar.markdown("""
