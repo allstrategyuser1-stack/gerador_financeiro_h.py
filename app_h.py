@@ -10,9 +10,11 @@ from generator_h import (
 from datetime import date
 
 def formatar_valor(x):
+    if pd.isna(x) or x == "":
+        return ""
     try:
-        return f"{float(str(x).replace(',', '.')):.2f}".replace(".", ",")
-    except:
+        return f"{float(x):.2f}".replace(".", ",")
+    except Exception:
         return ""
 
 st.title("Gerador de Movimentações Financeiras")
