@@ -192,7 +192,7 @@ def carregar_classificacao(estrutura_file, externo_file):
 # =========================
 # 🚀 GERAÇÃO
 # =========================
-def gerar_movimentacoes(qtd, decimais, data_inicio_liq, data_fim_liq, params=None):
+def gerar_movimentacoes(qtd_docs, cs_decimais, data_ini, data_fim, params=None):
 
     dados = []
 
@@ -205,7 +205,7 @@ def gerar_movimentacoes(qtd, decimais, data_inicio_liq, data_fim_liq, params=Non
     if fim_liq > hoje:
         fim_liq = hoje
 
-    for i in range(qtd):
+    for i in range(qtd_docs):
 
         # -------------------------
         # Natureza
@@ -215,7 +215,7 @@ def gerar_movimentacoes(qtd, decimais, data_inicio_liq, data_fim_liq, params=Non
         # -------------------------
         # Valor
         # -------------------------
-        valor_float = round(random.uniform(1, 100000), decimais)
+        valor_float = round(random.uniform(1, 100000), cs_decimais)
         valor = valor_float
 
         # -------------------------
