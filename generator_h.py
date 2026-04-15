@@ -216,7 +216,7 @@ def gerar_movimentacoes(qtd, decimais, data_inicio_liq, data_fim_liq, params=Non
         # Valor
         # -------------------------
         valor_float = round(random.uniform(1, 100000), decimais)
-        valor = f"{valor_float:.{decimais}f}".replace(".", ",")
+        valor = valor_float
 
         # -------------------------
         # Datas
@@ -346,10 +346,30 @@ def gerar_saldos(df_mov, saldos_iniciais):
 
     df = df[df["data_liquidacao"].notnull() & (df["data_liquidacao"] != "")]
 
+    # -------------------------
+    # Datas
+    # -------------------------
+    df["data_liquidacao"] = pd.to_datetime(df["data_liquidacao"], errors="coerce")
+    df = df[df["data_liquidacao"].notnull()]
+
+    # -------------------------
+    # Conversão segura de valor
+    # -------------------------
     df["valor"] = (
         df["valor"]
-        .astype(float)
+        .astype(str)
+        .str.replace(r"\.(?=\d{3})", "", regex=True)
+        .str.replace(",", ".", regex=False)
     )
+
+    df["valor"] = pd.to_numeric(df["valor"], errors="coerce")
+    df = df[df["valor"].notnull()]
+
+    # -------------------------
+    # Tipos seguros
+    # -------------------------
+    df["cod_tesouraria"] = df["cod_tesouraria"].astype(str)
+    df["natureza"] = df["natureza"].astype(str)
 
     # -------------------------
     # Agrupamento
@@ -368,7 +388,6 @@ def gerar_saldos(df_mov, saldos_iniciais):
 
     pivot.columns.name = None
 
-    # Garantir colunas
     if "E" not in pivot.columns:
         pivot["E"] = 0
     if "S" not in pivot.columns:
@@ -379,9 +398,6 @@ def gerar_saldos(df_mov, saldos_iniciais):
         "S": "total_saida"
     })
 
-    # -------------------------
-    # Ordenação
-    # -------------------------
     pivot = pivot.sort_values(["cod_tesouraria", "data_liquidacao"])
 
     # -------------------------
@@ -391,11 +407,11 @@ def gerar_saldos(df_mov, saldos_iniciais):
 
     for conta, grupo in pivot.groupby("cod_tesouraria"):
 
-        saldo = saldos_iniciais.get(conta, 0)
+        saldo = float(saldos_iniciais.get(conta, 0) or 0)
 
-        for _, row in grupo.iterrows():
-            entrada = row["total_entrada"]
-            saida = row["total_saida"]
+        for row in grupo.itertuples(index=False):
+            entrada = row.total_entrada
+            saida = row.total_saida
 
             saldo = saldo + entrada - saida
 
@@ -403,7 +419,7 @@ def gerar_saldos(df_mov, saldos_iniciais):
                 "saldo_final": round(saldo, 2),
                 "total_entrada": round(entrada, 2),
                 "total_saida": round(saida, 2),
-                "data": row["data_liquidacao"],
+                "data": row.data_liquidacao,
                 "cod_tesouraria": conta
             })
 
