@@ -175,7 +175,7 @@ if st.button("🚀 Gerar CSV"):
     st.session_state.pop("df", None)
     st.session_state.pop("df_saldos", None)
 
-    df = gerar_movimentacoes(qtd, dec, data_ini, data_fim, params)
+    df = gerar_movimentacoes(qtd_docs, cs_decimais, data_ini, data_fim, params)
     st.session_state["df"] = df
 
     if gerar_saldos_flag:
