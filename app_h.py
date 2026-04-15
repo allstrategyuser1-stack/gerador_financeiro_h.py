@@ -96,7 +96,14 @@ if "df" in st.session_state:
     df = st.session_state["df"]
 
     st.subheader("Prévia Movimentações")
-    st.dataframe(df.head())
+    df_preview = df.copy()
+
+    if "valor" in df_preview.columns:
+    df_preview["valor"] = df_preview["valor"].map(
+        lambda x: f"{x:.2f}".replace(".", ",")
+        )
+
+    st.dataframe(df_preview.head())
 
     st.download_button(
         "Baixar CSV Movimentações",
@@ -112,7 +119,15 @@ if gerar_saldos_flag and "df_saldos" in st.session_state:
     df_saldos = st.session_state["df_saldos"]
 
     st.subheader("Prévia Saldos")
-    st.dataframe(df_saldos.head())
+    df_saldos_preview = df_saldos.copy()
+
+    for col in ["SALDO_FINAL", "TOTAL_ENTRADA", "TOTAL_SAIDA"]:
+        if col in df_saldos_preview.columns:
+            df_saldos_preview[col] = df_saldos_preview[col].map(
+                lambda x: f"{x:.2f}".replace(".", ",")
+            )
+
+    st.dataframe(df_saldos_preview.head())
 
     st.download_button(
         "Baixar CSV Saldos",
