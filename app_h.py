@@ -1,100 +1,85 @@
 import streamlit as st
-from generator_h import gerar_movimentacoes
+from generator import (
+    gerar_movimentacoes,
+    carregar_unidades,
+    carregar_centro_custo,
+    carregar_classificacao,
+    carregar_tesouraria
+)
 from datetime import date
 
-# Configuração da página
-st.set_page_config(
-    page_title="Gerador Financeiro",
-    layout="wide"
-)
+st.title("Gerador de Movimentações Financeiras")
 
-# Estilo opcional
-st.markdown("""
-<style>
-    .stButton>button {
-        background-color: #4CAF50;
-        color: white;
-        border-radius: 8px;
-        height: 3em;
-        font-size: 16px;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-st.title("📊 Gerador de Movimentações Financeiras")
+params = {}
 
 # =========================
-# ⚙️ PARÂMETROS
+# UNIDADES
 # =========================
-st.markdown("## ⚙️ Parâmetros")
-
-col1, col2 = st.columns(2)
-
-with col1:
-    qtd = st.number_input(
-        "Quantidade de registros",
-        min_value=1,
-        max_value=100000,
-        value=100,
-        step=100
-    )
-
-with col2:
-    decimais = st.slider(
-        "Casas decimais do valor",
-        min_value=2,
-        max_value=6,
-        value=2
-    )
+st.header("Unidades")
+file_un = st.file_uploader("", key="upload_un")
+if file_un:
+    r = carregar_unidades(file_un)
+    params["cod_unidade"] = r["cod_unidade"]
+    st.dataframe(r["preview"])
 
 # =========================
-# 📅 INTERVALO DE LIQUIDAÇÃO
+# CENTRO DE CUSTO
 # =========================
-st.markdown("## 📅 Intervalo de Liquidação")
+st.header("Centro de Custo")
+file_cc = st.file_uploader("", key="upload_cc")
+if file_cc:
+    r = carregar_centro_custo(file_cc)
+    params["cod_centro_custo"] = r["cod_centro_custo"]
+    st.dataframe(r["preview"])
 
-data_inicio, data_fim = st.date_input(
-    "Selecione o período de liquidação",
+# =========================
+# TESOURARIA
+# =========================
+st.header("Tesouraria (Contas Bancárias)")
+file_tes = st.file_uploader("", key="upload_tesouraria")
+if file_tes:
+    try:
+        r = carregar_tesouraria(file_tes)
+        params["cod_tesouraria"] = r["cod_tesouraria"]
+        st.success("Contas bancárias carregadas com sucesso!")
+        st.dataframe(r["preview"])
+    except Exception as e:
+        st.error(f"Erro tesouraria: {e}")
+        st.stop()
+
+# =========================
+# CLASSIFICAÇÃO
+# =========================
+st.header("Classificação Financeira")
+
+file_est = st.file_uploader("Estrutura")
+file_ext = st.file_uploader("Externo")
+
+if file_est and file_ext:
+    r = carregar_classificacao(file_est, file_ext)
+    params["classificacoes"] = r["classificacoes"]
+    st.dataframe(r["preview"])
+
+# =========================
+# PARÂMETROS
+# =========================
+qtd = st.number_input("Quantidade de documentos desejada", 1, 10000, 20)
+dec = st.slider("Quantidade de casas decimais no valor", 2, 6, 2)
+
+data_ini, data_fim = st.date_input(
+    "Período liquidação",
     value=(date.today().replace(day=1), date.today())
 )
 
-st.info("Este intervalo afeta apenas de data de liquidação. As demais datas não são impactadas.")
-
-# Validação
-if data_inicio > data_fim:
-    st.error("A data inicial não pode ser maior que a data final.")
-    st.stop()
-
 # =========================
-# 🚀 AÇÃO
+# GERAR
 # =========================
-st.markdown("## 🚀 Gerar Dados")
+if st.button("Gerar CSV"):
+    df = gerar_movimentacoes(qtd, dec, data_ini, data_fim, params)
+    st.dataframe(df.head())
 
-gerar = st.button("Gerar CSV", use_container_width=True)
-
-# =========================
-# 📤 RESULTADO
-# =========================
-if gerar:
-
-    with st.spinner("Gerando dados..."):
-        df = gerar_movimentacoes(qtd, decimais, data_inicio, data_fim)
-
-    st.success("Arquivo gerado com sucesso!")
-
-    col1, col2 = st.columns([2, 1])
-
-    with col1:
-        st.markdown("### 🔍 Pré-visualização")
-        st.dataframe(df.head(20), use_container_width=True)
-
-    with col2:
-        st.markdown("### 📥 Download")
-        csv = df.to_csv(index=False).encode("utf-8")
-
-        st.download_button(
-            label="⬇️ Baixar CSV",
-            data=csv,
-            file_name="movimentacoes.csv",
-            mime="text/csv",
-            use_container_width=True
-        )
+    st.download_button(
+        "Baixar CSV",
+        df.to_csv(index=False).encode(),
+        "movimentacoes.csv"
+    )
