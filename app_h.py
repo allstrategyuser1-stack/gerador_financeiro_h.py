@@ -143,7 +143,7 @@ if gerar_saldos_flag and "df_saldos" in st.session_state:
 
     df_saldos_preview = df_saldos.copy()
 
-    for col in ["SALDO_FINAL", "TOTAL_ENTRADA", "TOTAL_SAIDA"]:
+    for col in ["saldo_final", "total_entrada", "total_saida"]:
         if col in df_saldos_preview.columns:
             df_saldos_preview[col] = (
                 df_saldos_preview[col]
