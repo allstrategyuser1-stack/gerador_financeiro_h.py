@@ -89,12 +89,44 @@ if gerar_saldos_flag and "cod_tesouraria" in params:
         saldos_iniciais[conta] = saldo
 
 # =========================
+# MOVIMENTAÇÕES
+# =========================
+if "df" in st.session_state:
+
+    df = st.session_state["df"]
+
+    st.subheader("Prévia Movimentações")
+    st.dataframe(df.head())
+
+    st.download_button(
+        "Baixar CSV Movimentações",
+        df.to_csv(index=False).encode(),
+        "movimentacoes.csv"
+    )
+
+# =========================
+# SALDOS
+# =========================
+if gerar_saldos_flag and "df_saldos" in st.session_state:
+
+    df_saldos = st.session_state["df_saldos"]
+
+    st.subheader("Prévia Saldos")
+    st.dataframe(df_saldos.head())
+
+    st.download_button(
+        "Baixar CSV Saldos",
+        df_saldos.to_csv(index=False).encode(),
+        "saldos.csv"
+    )
+
+# =========================
 # GERAR
 # =========================
 if st.button("Gerar CSV"):
 
-    # GERA MOVIMENTAÇÕES
     df = gerar_movimentacoes(qtd, dec, data_ini, data_fim, params)
+    st.session_state["df"] = df
 
     st.dataframe(df.head())
 
@@ -108,6 +140,8 @@ if st.button("Gerar CSV"):
     # SALDOS (SÓ SE FLAG ATIVO)
     # -------------------------
     if gerar_saldos_flag:
+        df_saldos = gerar_saldos(df, saldos_iniciais)
+        st.session_state["df_saldos"] = df_saldos
 
         if not saldos_iniciais:
             st.error("Preencha os saldos iniciais.")
