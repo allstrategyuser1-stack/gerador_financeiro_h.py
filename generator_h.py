@@ -396,24 +396,33 @@ def gerar_saldos(df_mov, saldos_iniciais):
     # -------------------------
     # Saldo acumulado
     # -------------------------
-    resultado = []
+    pivot["saldo_mov"] = pivot["total_entrada"] - pivot["total_saida"]
 
-    for conta, grupo in pivot.groupby("cod_tesouraria"):
+    pivot["saldo_acumulado"] = (
+        pivot.groupby("cod_tesouraria")["saldo_mov"].cumsum()
+    )
 
-        saldo = float(saldos_iniciais.get(conta, 0) or 0)
+    pivot["saldo_inicial"] = pivot["cod_tesouraria"].map(
+        lambda conta: float(saldos_iniciais.get(conta, 0) or 0)
+    )
 
-        for row in grupo.itertuples(index=False):
-            entrada = float(row.total_entrada)
-            saida = float(row.total_saida)
+    pivot["saldo_final"] = pivot["saldo_acumulado"] + pivot["saldo_inicial"]
 
-            saldo = saldo + entrada - saida
+    # -------------------------
+    # Formatação final
+    # -------------------------
+    resultado = pivot[[
+        "saldo_final",
+        "total_entrada",
+        "total_saida",
+        "data_liquidacao",
+        "cod_tesouraria"
+    ]].copy()
 
-            resultado.append({
-                "saldo_final": round(saldo, 2),
-                "total_entrada": round(entrada, 2),
-                "total_saida": round(saida, 2),
-                "data": row.data_liquidacao.strftime("%Y-%m-%d"),
-                "cod_tesouraria": conta
-            })
+    resultado = resultado.rename(columns={
+        "data_liquidacao": "data"
+    })
 
-    return pd.DataFrame(resultado)
+    resultado["data"] = resultado["data"].dt.strftime("%Y-%m-%d")
+
+return resultado.reset_index(drop=True)
