@@ -124,7 +124,7 @@ if "df" in st.session_state:
     st.download_button(
         "Baixar CSV Movimentações",
         df.to_csv(index=False, sep=";", decimal=",").encode(),
-        "movimentacoes.csv"
+        "movimentacoes.csv",
         key="download_mov"
     )
 
@@ -148,7 +148,7 @@ if gerar_saldos_flag and "df_saldos" in st.session_state:
     st.download_button(
         "Baixar CSV Saldos",
         df_saldos.to_csv(index=False, sep=";", decimal=",").encode(),
-        "saldos.csv"
+        "saldos.csv",
         key="download_saldos"
     )
 
