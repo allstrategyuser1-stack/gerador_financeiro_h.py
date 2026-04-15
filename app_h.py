@@ -106,10 +106,10 @@ with st.expander("Parâmetros de Geração", expanded=True):
             value=(date.today().replace(day=1), date.today())
         )
 
-    if isinstance(datas, tuple):
-        data_ini, data_fim = datas
-    else:
-        data_ini = data_fim = datas
+        if isinstance(datas, tuple):
+            data_ini, data_fim = datas
+        else:
+            data_ini = data_fim = datas
 
     gerar_saldos_flag = st.checkbox("Gerar CSV de Saldos")
 
