@@ -23,7 +23,7 @@ params = {}
 # UNIDADES
 # =========================
 st.header("Unidades")
-file_un = st.file_uploader("", key="upload_un")
+file_un = st.loader("", key="upload_un")
 if file_un:
     r = carregar_unidades(file_un)
     params["cod_unidade"] = r["cod_unidade"]
@@ -59,8 +59,8 @@ if file_tes:
 # =========================
 st.header("Classificação Financeira")
 
-file_est = st.file_uploader("Estrutura")
-file_ext = st.file_uploader("Externo")
+file_est = st.loader("Estrutura")
+file_ext = st.loader("Externo")
 
 if file_est and file_ext:
     r = carregar_classificacao(file_est, file_ext)
@@ -70,16 +70,27 @@ if file_est and file_ext:
 # =========================
 # PARÂMETROS
 # =========================
+# QUANTIDADE DE DOCUMENTOS
 qtd = st.number_input("Quantidade de documentos desejada", 1, 10000, 20)
+
+# QUANTIDADE DE CASAS DECIMAIS NO VALOR
 dec = st.slider("Quantidade de casas decimais no valor", 2, 6, 2)
 
-data_ini, data_fim = st.date_input(
+# SELEÇÃO DE PERÍODO
+datas = st.date_input(
     "Período liquidação",
     value=(date.today().replace(day=1), date.today())
 )
 
+if isinstance(datas, tuple):
+    data_ini, data_fim = datas
+else:
+    data_ini = data_fim = datas
+
+# FLAG SE GERA CSV DE SALDOS OU NÃO
 gerar_saldos_flag = st.checkbox("Gerar CSV de Saldos")
 
+# CAMPO PARA PREENCHER SALDOS INICIAIS DAS CONTAS
 saldos_iniciais = {}
 
 if gerar_saldos_flag and "cod_tesouraria" in params:
@@ -114,6 +125,7 @@ if "df" in st.session_state:
         "Baixar CSV Movimentações",
         df.to_csv(index=False, sep=";", decimal=",").encode(),
         "movimentacoes.csv"
+        key="download_mov"
     )
 
 # =========================
@@ -137,6 +149,7 @@ if gerar_saldos_flag and "df_saldos" in st.session_state:
         "Baixar CSV Saldos",
         df_saldos.to_csv(index=False, sep=";", decimal=",").encode(),
         "saldos.csv"
+        key="download_saldos"
     )
 
 # =========================
