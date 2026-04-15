@@ -82,13 +82,29 @@ with st.expander("Cadastros (Arquivos Base)", expanded=True):
 # =========================
 with st.expander("Parâmetros de Geração", expanded=True):
 
-    qtd = st.number_input("Quantidade de documentos desejada", 1, 10000, 20)
-    dec = st.slider("Casas decimais no valor", 2, 6, 2)
+    col1, col2, col3 = st.columns(3)
 
-    datas = st.date_input(
-        "Período liquidação",
-        value=(date.today().replace(day=1), date.today())
-    )
+    with col1:
+        qtd = st.number_input(
+            "Qtd. documentos",
+            min_value=1,
+            max_value=10000,
+            value=20
+        )
+
+    with col2:
+        dec = st.slider(
+            "Casas decimais",
+            min_value=2,
+            max_value=6,
+            value=2
+        )
+
+    with col3:
+        datas = st.date_input(
+            "Período liquidação",
+            value=(date.today().replace(day=1), date.today())
+        )
 
     if isinstance(datas, tuple):
         data_ini, data_fim = datas
