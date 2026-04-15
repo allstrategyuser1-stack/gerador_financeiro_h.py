@@ -71,18 +71,7 @@ data_ini, data_fim = st.date_input(
     value=(date.today().replace(day=1), date.today())
 )
 
-# =========================
-# GERAR
-# =========================
-if st.button("Gerar CSV"):
-    df = gerar_movimentacoes(qtd, dec, data_ini, data_fim, params)
-    st.dataframe(df.head())
-
-    st.download_button(
-        "Baixar CSV",
-        df.to_csv(index=False).encode(),
-        "movimentacoes.csv"
-    )
+gerar_saldos_flag = st.checkbox("Gerar CSV de Saldos")
 
 saldos_iniciais = {}
 
@@ -97,3 +86,32 @@ if "cod_tesouraria" in params:
             key=f"saldo_{conta}"
         )
         saldos_iniciais[conta] = saldo
+
+# =========================
+# GERAR
+# =========================
+if st.button("Gerar CSV"):
+    df = gerar_movimentacoes(qtd, dec, data_ini, data_fim, params)
+
+    st.dataframe(df.head())
+
+    st.download_button(
+        "Baixar CSV Movimentações",
+        df.to_csv(index=False).encode(),
+        "movimentacoes.csv"
+    )
+
+    # -------------------------
+    # SALDOS
+    # -------------------------
+    if gerar_saldos_flag:
+        df_saldos = gerar_saldos(df, saldos_iniciais)
+
+        st.subheader("Prévia Saldos")
+        st.dataframe(df_saldos.head())
+
+        st.download_button(
+            "Baixar CSV Saldos",
+            df_saldos.to_csv(index=False).encode(),
+            "saldos.csv"
+        )
