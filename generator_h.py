@@ -425,4 +425,4 @@ def gerar_saldos(df_mov, saldos_iniciais):
 
     resultado["data"] = resultado["data"].dt.strftime("%Y-%m-%d")
 
-return resultado.reset_index(drop=True)
+    return resultado.reset_index(drop=True)
