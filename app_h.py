@@ -154,7 +154,7 @@ if st.button("Gerar CSV"):
 
     st.download_button(
         "Baixar CSV Movimentações",
-        df.to_csv(index=False).encode(),
+        df.to_csv(index=False, sep=";", decimal=",").encode(),
         "movimentacoes.csv"
     )
 
