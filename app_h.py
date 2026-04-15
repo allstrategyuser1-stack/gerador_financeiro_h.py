@@ -101,17 +101,17 @@ if st.button("Gerar CSV"):
         "movimentacoes.csv"
     )
 
-    # -------------------------
-    # SALDOS
-    # -------------------------
-    if gerar_saldos_flag:
+# -------------------------
+# SALDOS
+# -------------------------
+if gerar_saldos_flag:
     df_saldos = gerar_saldos(df, saldos_iniciais)
 
-        st.subheader("Prévia Saldos")
-        st.dataframe(df_saldos.head())
+    st.subheader("Prévia Saldos")
+    st.dataframe(df_saldos.head())
 
-        st.download_button(
-            "Baixar CSV Saldos",
-            df_saldos.to_csv(index=False).encode(),
-            "saldos.csv"
-        )
+    st.download_button(
+        "Baixar CSV Saldos",
+        df_saldos.to_csv(index=False).encode(),
+        "saldos.csv"
+    )
