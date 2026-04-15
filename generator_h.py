@@ -199,8 +199,8 @@ def gerar_movimentacoes(qtd_docs, cs_decimais, data_ini, data_fim, params=None):
     hoje = datetime.now()
     inicio_base = hoje - timedelta(days=365)
 
-    inicio_liq = datetime.combine(data_inicio_liq, datetime.min.time())
-    fim_liq = datetime.combine(data_fim_liq, datetime.min.time())
+    inicio_liq = datetime.combine(data_ini, datetime.min.time())
+    fim_liq = datetime.combine(data_fim, datetime.min.time())
 
     if fim_liq > hoje:
         fim_liq = hoje
