@@ -402,11 +402,11 @@ def gerar_saldos(df_mov, saldos_iniciais):
             saldo = saldo + entrada - saida
 
             resultado.append({
-                "SALDO_FINAL": round(saldo, 2),
-                "TOTAL_ENTRADA": round(entrada, 2),
-                "TOTAL_SAIDA": round(saida, 2),
-                "DATA": row["data_liquidacao"],
-                "COD_TESOURARIA": conta
+                "saldo_final": round(saldo, 2),
+                "total_entrada": round(entrada, 2),
+                "total_saida": round(saida, 2),
+                "data": row["data_liquidacao"],
+                "cod_tesouraria": conta
             })
 
     return pd.DataFrame(resultado)
