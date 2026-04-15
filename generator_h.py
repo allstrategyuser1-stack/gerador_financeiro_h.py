@@ -346,8 +346,12 @@ def gerar_saldos(df_mov, saldos_iniciais):
 
     df = df[df["data_liquidacao"].notnull() & (df["data_liquidacao"] != "")]
 
-    # Converter valor
-    df["valor"] = df["valor"].str.replace(",", ".").astype(float)
+    df["valor"] = (
+        df["valor"]
+        .str.replace(".", "", regex=False)
+        .str.replace(",", ".", regex=False)
+        .astype(float)
+    )
 
     # -------------------------
     # Agrupamento
