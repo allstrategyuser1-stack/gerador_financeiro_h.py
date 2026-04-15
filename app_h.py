@@ -145,7 +145,11 @@ if gerar_saldos_flag and "df_saldos" in st.session_state:
 
     for col in ["SALDO_FINAL", "TOTAL_ENTRADA", "TOTAL_SAIDA"]:
         if col in df_saldos_preview.columns:
-            df_saldos_preview[col] = df_saldos_preview[col].map(formatar_valor)
+            df_saldos_preview[col] = (
+                df_saldos_preview[col]
+                .astype(str)
+                .map(formatar_valor)
+            )
 
     st.dataframe(df_saldos_preview.head())
 
