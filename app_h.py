@@ -92,8 +92,8 @@ with st.expander("Parâmetros de Geração", expanded=True):
             value=20
         )
 
-    with col2:
-        dec = st.slider(
+        with col2:
+        qtd = st.number_input(
             "Casas decimais",
             min_value=2,
             max_value=6,
