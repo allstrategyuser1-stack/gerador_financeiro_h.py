@@ -75,7 +75,7 @@ gerar_saldos_flag = st.checkbox("Gerar CSV de Saldos")
 
 saldos_iniciais = {}
 
-if "cod_tesouraria" in params:
+if gerar_saldos_flag and "cod_tesouraria" in params:
     st.subheader("Saldo inicial por conta")
 
     for conta in params["cod_tesouraria"]:
@@ -104,8 +104,8 @@ if st.button("Gerar CSV"):
     # -------------------------
     # SALDOS
     # -------------------------
-    if gerar_saldos_flag:
-        df_saldos = gerar_saldos(df, saldos_iniciais)
+if gerar_saldos_flag:
+    df_saldos = gerar_saldos(df, saldos_iniciais)
 
         st.subheader("Prévia Saldos")
         st.dataframe(df_saldos.head())
