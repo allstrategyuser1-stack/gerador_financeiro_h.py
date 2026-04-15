@@ -83,3 +83,17 @@ if st.button("Gerar CSV"):
         df.to_csv(index=False).encode(),
         "movimentacoes.csv"
     )
+
+saldos_iniciais = {}
+
+if "cod_tesouraria" in params:
+    st.subheader("Saldo inicial por conta")
+
+    for conta in params["cod_tesouraria"]:
+        saldo = st.number_input(
+            f"Saldo inicial - Conta {conta}",
+            value=0.0,
+            step=100.0,
+            key=f"saldo_{conta}"
+        )
+        saldos_iniciais[conta] = saldo
