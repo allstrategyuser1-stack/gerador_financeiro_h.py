@@ -85,7 +85,7 @@ with st.expander("Parâmetros de Geração", expanded=True):
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        qtd = st.number_input(
+        qtd_docs = st.number_input(
             "Qtd. documentos",
             min_value=1,
             max_value=10000,
@@ -93,7 +93,7 @@ with st.expander("Parâmetros de Geração", expanded=True):
         )
 
     with col2:
-        qtd = st.number_input(
+        cs_decimais = st.number_input(
             "Casas decimais",
             min_value=2,
             max_value=6,
