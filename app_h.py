@@ -117,7 +117,11 @@ if "df" in st.session_state:
     df_preview = df.copy()
 
     if "valor" in df_preview.columns:
-        df_preview["valor"] = df_preview["valor"].map(formatar_valor)
+        df_preview["valor"] = (
+            df_preview["valor"]
+            .astype(str)
+            .map(formatar_valor)
+        )
 
     st.dataframe(df_preview.head())
 
@@ -177,7 +181,11 @@ if st.button("Gerar CSV"):
     df_preview = df.copy()
 
     if "valor" in df_preview.columns:
-        df_preview["valor"] = df_preview["valor"].map(formatar_valor)
+        df_preview["valor"] = (
+            df_preview["valor"]
+            .astype(str)
+            .map(formatar_valor)
+        )
 
     st.subheader("Prévia Movimentações")
     st.dataframe(df_preview.head())
