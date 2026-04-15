@@ -11,16 +11,17 @@ from datetime import date
 
 st.sidebar.title("Informações importantes")
 
-st.sidebar.info("Os templates que devem ser utilizados para importação dos dados base são os do Software Fluxo, basta exportar do Fluxo e importar aqui")
+st.sidebar.info("Os templates que devem ser utilizados para importação dos dados base são os do Software Fluxo, basta exportar do Fluxo e importar aqui ;)")
 st.sidebar.markdown("### ⚙️ Regras")
 st.sidebar.markdown("""
-- As informações dos documentos são aleatórios e baseadas nas estruturas informadas pelo usuário
+- As informações dos documentos são aleatórias e baseadas nas estruturas informadas pelo usuário
 - O período é referente a data de liquidação dos documentos, o vencimento será aleatório
 - O usuário pode escolher gerar também o arquivo de saldos para alimentar no Fluxo, basta marcar a opção "Gerar arquivo com saldos"
 """)
 
 st.sidebar.warning("""
-- Teste
+- Os saldos são gerados de acordo com o saldo inicial preenchido para cada conta bancária e as entradas e saídas de cada conta no arquivo de documentos
+- Os dados gerados são para uma base sem dimensões
 - Não utilizar em produção real""")
 
 # =========================
