@@ -9,6 +9,18 @@ from generator_h import (
 )
 from datetime import date
 
+st.sidebar.title("📌 Painel de Informações")
+
+st.sidebar.info("Geração de dados financeiros simulados")
+
+st.sidebar.markdown("### ⚙️ Regras")
+st.sidebar.markdown("""
+- Valores são aleatórios
+- Datas seguem o período selecionado
+- Classificações dependem dos arquivos enviados
+""")
+
+st.sidebar.warning("Não utilizar em produção real")
 
 # =========================
 # FORMATADOR
