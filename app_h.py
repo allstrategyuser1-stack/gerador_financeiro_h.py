@@ -9,9 +9,9 @@ from generator_h import (
 )
 from datetime import date
 
-st.sidebar.title("📌 Painel de Informações")
+st.sidebar.title("Informações importantes")
 
-st.sidebar.info("Geração de dados financeiros simulados")
+st.sidebar.info("Os templates que devem ser utilizados para importação dos dados base são os do Software Fluxo, basta exportar do Fluxo e importar aqui")
 
 st.sidebar.markdown("### ⚙️ Regras")
 st.sidebar.markdown("""
