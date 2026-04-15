@@ -104,7 +104,7 @@ if st.button("Gerar CSV"):
     # -------------------------
     # SALDOS
     # -------------------------
-if gerar_saldos_flag:
+    if gerar_saldos_flag:
     df_saldos = gerar_saldos(df, saldos_iniciais)
 
         st.subheader("Prévia Saldos")
