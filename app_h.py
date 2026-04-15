@@ -160,13 +160,13 @@ if st.button("Gerar CSV"):
         df_saldos = gerar_saldos(df, saldos_iniciais)
         st.session_state["df_saldos"] = df_saldos
 
+    # PREVIEW CORRETO
     df_preview = df.copy()
 
     if "valor" in df_preview.columns:
-        df_preview["valor"] = df_preview["valor"].map(
-            lambda x: f"{x:.2f}".replace(".", ",")
-        )
+        df_preview["valor"] = df_preview["valor"].map(formatar_valor)
 
+    st.subheader("Prévia Movimentações")
     st.dataframe(df_preview.head())
 
     st.download_button(
