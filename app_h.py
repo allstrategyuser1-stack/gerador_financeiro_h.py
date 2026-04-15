@@ -92,7 +92,7 @@ with st.expander("Parâmetros de Geração", expanded=True):
             value=20
         )
 
-        with col2:
+    with col2:
         qtd = st.number_input(
             "Casas decimais",
             min_value=2,
