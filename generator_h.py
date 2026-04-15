@@ -348,8 +348,6 @@ def gerar_saldos(df_mov, saldos_iniciais):
 
     df["valor"] = (
         df["valor"]
-        .str.replace(".", "", regex=False)
-        .str.replace(",", ".", regex=False)
         .astype(float)
     )
 
