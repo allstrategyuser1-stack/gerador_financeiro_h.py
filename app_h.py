@@ -23,7 +23,7 @@ params = {}
 # UNIDADES
 # =========================
 st.header("Unidades")
-file_un = st.loader("", key="upload_un")
+file_un = st.file_uploader("", key="upload_un")
 if file_un:
     r = carregar_unidades(file_un)
     params["cod_unidade"] = r["cod_unidade"]
@@ -59,8 +59,8 @@ if file_tes:
 # =========================
 st.header("Classificação Financeira")
 
-file_est = st.loader("Estrutura")
-file_ext = st.loader("Externo")
+file_est = st.file_uploader("Estrutura", key="estrutura_cf")
+file_est = st.file_uploader("Externo", key="externo_cf")
 
 if file_est and file_ext:
     r = carregar_classificacao(file_est, file_ext)
